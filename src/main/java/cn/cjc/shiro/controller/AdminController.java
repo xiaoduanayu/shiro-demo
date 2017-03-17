@@ -43,4 +43,9 @@ public class AdminController {
         return "admin/index";
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(Model model) {
+        return "admin/logout";
+    }
+
 }  

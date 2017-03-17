@@ -1,6 +1,7 @@
 package cn.cjc.shiro.mapper;
 
 import cn.cjc.shiro.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface UserMapper {
 
     List<String> queryUserRoles(String username);
 
-    List<String> queryUserPermissions(List<String> roles);
+    List<String> queryUserPermissions(@Param("roles") List<String> roles);
 }
