@@ -1,12 +1,16 @@
 package cn.cjc.shiro.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/admin")
@@ -14,37 +18,39 @@ public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index(Model model) {
+    @RequestMapping("/index")
+    public String index() {
+        System.out.println(SecurityUtils.getSubject().isAuthenticated());
         return "admin/index";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model) {
-        logger.info("login get");
+    @RequestMapping("/login")
+    public String login() {
         return "admin/login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String doLogin(Model model) {
-        logger.info("login post");
-        return "admin/index";
+    @RequestMapping("/doLogin")
+    public String doLogin(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        SecurityUtils.getSubject().login(token);
+        String url = WebUtils.getSavedRequest(request).getRequestUrl();
+        return "redirect:" + url;
     }
 
     @RequiresRoles("user")
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public String shiroUser(Model model) {
+    @RequestMapping("/user")
+    public String shiroUser() {
         return "admin/index";
     }
 
     @RequiresRoles("admin")
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String shiroAdmin(Model model) {
+    @RequestMapping("/admin")
+    public String shiroAdmin() {
         return "admin/index";
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(Model model) {
+    @RequestMapping("/logout")
+    public String logout() {
         return "admin/logout";
     }
 

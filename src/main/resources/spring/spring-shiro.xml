@@ -44,7 +44,8 @@
         <property name="unauthorizedUrl" value="/admin/logout"/>
         <property name="filterChainDefinitions">
             <value>
-                /admin/login = authc
+                /admin/login = anon
+                /admin/doLogin = anon
                 /admin/logout = logout
                 /static/** = anon
                 /admin/** = authc
