@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="shiroDbRealm" class="cn.cjc.shiro.base.ShiroDbRealm"/>
+    <bean id="shiroDbRealm" class="cn.cjc.shiro.base.UserRealm"/>
 
     <!-- 用户授权信息Cache, 采用EhCache -->
     <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">

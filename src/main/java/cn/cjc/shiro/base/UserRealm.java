@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import java.util.List;
 
-public class ShiroDbRealm extends AuthorizingRealm {
+public class UserRealm extends AuthorizingRealm {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserRealm.class);
 
     @Resource
     private AccountService accountService;
