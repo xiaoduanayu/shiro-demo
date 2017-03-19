@@ -7,6 +7,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +21,9 @@ public class UserRealm extends AuthorizingRealm {
     @Resource
     private AccountService accountService;
 
-    /**
-     * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
-     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection p) {
-        logger.info("授权认证：" + p.getRealmNames());
+        logger.info("doGetAuthorizationInfo：" + p);
         String username = (String) p.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         List<String> roles = accountService.queryUserRoles(username);
@@ -33,7 +31,6 @@ public class UserRealm extends AuthorizingRealm {
         List<String> permissions = accountService.queryUserPermissions(roles);
         info.addStringPermissions(permissions);
         return info;
-
     }
 
     /**
@@ -41,14 +38,18 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken authcToken) throws AuthenticationException {
-        logger.info("authc pass:");
-        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        logger.info("authc name:" + token.getUsername());
-        User user = accountService.findUserByLoginName(token.getUsername());
-        if (user != null && user.getPassword().equals(new String(token.getPassword()))) {
-            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
+            AuthenticationToken token) throws AuthenticationException {
+        logger.info("doGetAuthenticationInfo：" + token);
+        String username = (String) token.getPrincipal();
+        User user = accountService.findUserByLoginName(username);
+        if (user == null) {
+            throw new UnknownAccountException();//没找到帐号
         }
-        return null;
+        return new SimpleAuthenticationInfo(
+                user.getUsername(), //用户名
+                user.getPassword(), //密码
+                ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+passwordSalt
+                getName()  //realm name
+        );
     }
 }  

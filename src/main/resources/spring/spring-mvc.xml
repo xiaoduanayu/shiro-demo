@@ -3,16 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 						http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context
 						http://www.springframework.org/schema/context/spring-context.xsd
 						http://www.springframework.org/schema/mvc
-						http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-
-    <!--<context:property-placeholder-->
-            <!--location="classpath:config/dove.properties,classpath:config/sys.properties,file://${CONFIG_DIR}/jdt_production.properties"-->
-            <!--ignore-resource-not-found="true" ignore-unresolvable="true"/>-->
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:component-scan base-package="cn.cjc.shiro.controller"/>
     <!--静态文件处理-->
@@ -80,14 +79,8 @@
         </property>
     </bean>
 
-    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-
-    <!-- AOP式方法级权限检查  -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-          depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true"/>
-    </bean>
+    <!--支持@RequiresRoles等注解-->
+    <aop:config proxy-target-class="true"/>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>

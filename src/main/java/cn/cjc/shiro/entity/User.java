@@ -10,6 +10,10 @@ public class User {
     private String password;
     private String passwordSalt;
 
+    public String getCredentialsSalt() {
+        return username + passwordSalt;
+    }
+
     public Long getId() {
         return id;
     }

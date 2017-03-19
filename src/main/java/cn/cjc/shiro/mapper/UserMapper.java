@@ -10,6 +10,9 @@ import java.util.List;
  * @since 2017-03-17
  */
 public interface UserMapper {
+
+    void addUser(User user);
+
     User getUser(User userName);
 
     List<String> queryUserRoles(String username);
