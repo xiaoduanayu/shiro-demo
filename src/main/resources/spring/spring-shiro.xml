@@ -33,6 +33,14 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
 
+    <!-- 基于Form表单的身份验证过滤器 -->
+    <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+        <property name="usernameParam" value="name"/>
+        <property name="passwordParam" value="password"/>
+        <property name="loginUrl" value="/admin/login"/>
+        <property name="successUrl" value="/admin/loginSuccess"/>
+    </bean>
+
     <!-- Shiro Filter -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -40,12 +48,11 @@
         <!--successUrl：登陆成功后跳转此页面-->
         <!--unauthorizedUrl：用户访问无权限的链接时跳转此页面-->
         <property name="loginUrl" value="/admin/login"/>
-        <property name="successUrl" value="/admin/index"/>
+        <property name="successUrl" value="/admin/loginSuccess"/>
         <property name="unauthorizedUrl" value="/admin/logout"/>
         <property name="filterChainDefinitions">
             <value>
-                /admin/login = anon
-                /admin/doLogin = anon
+                /admin/login = authc
                 /admin/logout = logout
                 /static/** = anon
                 /admin/** = authc

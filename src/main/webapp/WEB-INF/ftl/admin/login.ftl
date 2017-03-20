@@ -8,8 +8,9 @@
 <body>
 <div id="login">
     <h1>Login</h1>
-    <form method="post" action="/admin/doLogin">
-        <input type="text" required="required" placeholder="用户名" name="username"/>
+    ${error!""}
+    <form method="post" action="/admin/login">
+        <input type="text" required="required" placeholder="用户名" name="name"/>
         <input type="password" required="required" placeholder="密码" name="password"/>
         <button class="but" type="submit">登录</button>
     </form>
