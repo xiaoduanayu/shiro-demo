@@ -50,14 +50,21 @@
         <!--unauthorizedUrl：用户访问无权限的链接时跳转此页面-->
         <property name="loginUrl" value="/admin/login"/>
         <property name="successUrl" value="/admin/loginSuccess"/>
-        <property name="unauthorizedUrl" value="/admin/logout"/>
         <property name="filterChainDefinitions">
             <value>
                 /admin/login = authc
-                /admin/logout = logout
                 /static/** = anon
                 /admin/** = authc
             </value>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.AuthorizationException">/admin/error</prop>
+                <prop key="org.apache.shiro.authc.AuthenticationException">/admin/error</prop>
+            </props>
         </property>
     </bean>
 </beans>
