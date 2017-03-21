@@ -47,7 +47,6 @@
         <!--loginUrl：登陆页面，用户未登录访问系统时，会先跳转到此页面-->
         <!--successUrl：登陆成功后跳转此页面，但这个有前提条件，如果一开始访问的是/admin/index，那么会跳转到/admin/login，然后再跳转到/admin/index，
         但是如果一开始访问的就是/admin/login，那么登录成功后才会跳转到successUrl页面-->
-        <!--unauthorizedUrl：用户访问无权限的链接时跳转此页面-->
         <property name="loginUrl" value="/admin/login"/>
         <property name="successUrl" value="/admin/loginSuccess"/>
         <property name="filterChainDefinitions">
@@ -59,11 +58,12 @@
         </property>
     </bean>
 
+    <!--统一异常处理-->
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
-                <prop key="org.apache.shiro.authz.AuthorizationException">/admin/error</prop>
-                <prop key="org.apache.shiro.authc.AuthenticationException">/admin/error</prop>
+                <prop key="org.apache.shiro.authc.AuthenticationException">admin/authenticate_error</prop>
+                <prop key="org.apache.shiro.authz.AuthorizationException">admin/authorize_error</prop>
             </props>
         </property>
     </bean>

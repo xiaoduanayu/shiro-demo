@@ -61,11 +61,6 @@ public class AdminController {
         return "admin/index";
     }
 
-    @RequestMapping("/logout")
-    public String logout() {
-        return "admin/logout";
-    }
-
     @RequestMapping("/loginSuccess")
     public String loginSuccess() {
         return "admin/login_success";
